@@ -20,7 +20,7 @@ function parseCAD(data) {
     lines.forEach(line => {
         const cols = line.split("| ");
 
-        if (cols.length <= 7) {
+        if (cols.length <= 6) {
             uniqueId = cols[0];
         } else {
             parsed.push(
