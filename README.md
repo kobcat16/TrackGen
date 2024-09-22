@@ -1,7 +1,6 @@
-# [TrackGen](https://strawberrymaster.github.io/TrackGen)
+# TrackGen
 
-The simplest tropical cyclone track map generator. This is a fork of [TrackGen](https://trackgen.codingcactus.repl.co/) by [CodingCactus](https://github.com/Coding-Cactus). I have made some changes to the code - mostly to ensure it works offline, correctly. The world background is also stored in the repository, instead of an external server.
-
+The simplest tropical cyclone track map generator. This is a fork of [TrackGen](https://github.com/StrawberryMaster/TrackGen) by [StrawberryMaster](https://github.com/StrawberryMaster), which is a fork of [TrackGen](https://trackgen.codingcactus.repl.co/) by [CodingCactus](https://github.com/Coding-Cactus). I have made some changes to the code which adds CAD (my own tropical cyclone analysis data) compatibility to the BT File section, as well as more categories for hypotheticals (can be toggled).
 ## Usage
 
 - Each line is a point to be plotted on the map
