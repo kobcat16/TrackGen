@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>TrackGen</title>
+	<meta name="author" content="Coding-Cactus, StrawberryMaster">
+	<meta name="description" content="Generate track maps from tropical cyclone data">
+	<meta name="keywords"
+		content="trackgen, track generator, tropical cyclone, track map, hurricane, typhoon, cyclone, storm, weather, meteorology, data visualization, open source">
+	<meta name="theme-color" content="#fbaf00">
+	<meta name="title" content="TrackGen">
+
+	<meta property="og:title" content="TrackGen">
+	<meta property="og:type" content="website">
+	<meta property="og:image" content="https://strawberrymaster.github.io/TrackGen/static/media/cyclone.png">
+	<meta property="og:url" content="https://strawberrymaster.github.io/TrackGen/">
+	<meta property="og:description" content="Generate track maps from tropical cyclone data.">
+
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:title" content="TrackGen">
+	<meta name="twitter:description" content="Generate track maps from tropical cyclone data.">
+	<meta name="twitter:image" content="https://strawberrymaster.github.io/TrackGen/static/media/cyclone.png">
+
+	<link href="static/css/style.css" rel="stylesheet" type="text/css" />
+	<link href="static/media/favicon.png" rel="icon" />
+	<link rel="manifest" href="manifest.webmanifest" crossorigin="anonymous">
+	<link rel="canonical" href="https://strawberrymaster.github.io/TrackGen/" />
+</head>
+
+<body>
+	<a href="https://github.com/StrawberryMaster/TrackGen" class="github-corner"
+		aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250"
+			style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
+			<path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+			<path
+				d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+				fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+			<path
+				d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+				fill="currentColor" class="octo-body"></path>
+		</svg></a>
+	<style>
+		.github-corner:hover .octo-arm {
+			animation: octocat-wave 560ms ease-in-out
+		}
+
+		@keyframes octocat-wave {
+
+			0%,
+			100% {
+				transform: rotate(0)
+			}
+
+			20%,
+			60% {
+				transform: rotate(-25deg)
+			}
+
+			40%,
+			80% {
+				transform: rotate(10deg)
+			}
+		}
+
+		@media (max-width:500px) {
+			.github-corner:hover .octo-arm {
+				animation: none
+			}
+
+			.github-corner .octo-arm {
+				animation: octocat-wave 560ms ease-in-out
+			}
+		}
+	</style>
+
+	<div id="map-indicator">
+		<ion-icon name="map-outline" aria-label="Map indicator" title="Map indicator"></ion-icon>
+
+		<div class="loader" style="display: none;">
+			<svg class="circular-loader" viewBox="25 25 50 50">
+				<circle class="loader-path" cx="50" cy="50" r="20" fill="none" stroke="#fff" stroke-width="5" />
+			</svg>
+		</div>
+	</div>
+
+	<main>
+		<h1>TrackGen</h1>
+		<div id="input-type">
+			<button type="submit" class="selected">Manual Input</button>
+			<button type="submit">BT File</button>
+		</div>
+
+		<div class="page">
+			<div id="headers">
+				<h3>Name</h3>
+				<h3>Latitude</h3>
+				<h3>Longitude</h3>
+				<h3>Wind Speed</h3>
+				<h3>Stage</h3>
+			</div>
+
+			<form>
+				<div id="inputs">
+					<div class="point">
+						<div>
+							<label>
+								<span>Name: </span>
+								<input type="text" class="name" aria-label="Name" name="storm-name">
+							</label>
+						</div>
+
+						<div>
+							<label>
+								<span>Latitude: </span>
+								<input type="number" step="any" class="latitude" min="0" max="90" aria-label="Latitude"
+									name="latitude" required>
+							</label>
+							<select class="latitude" name="latitude-format" aria-label="Latitude format">
+								<option value="°N">°N</option>
+								<option value="°S">°S</option>
+							</select>
+						</div>
+
+						<div>
+							<label>
+								<span>Longitude: </span>
+								<input type="number" step="any" class="longitude" min="0" max="180"
+									aria-label="Longitude" name="longitude" required>
+							</label>
+							<select class="longitude" name="longitude-format" aria-label="Longitude format">
+								<option value="°E">°E</option>
+								<option value="°W">°W</option>
+							</select>
+						</div>
+
+						<div>
+							<label>
+								<span>Wind Speed: </span>
+								<input type="number" step="any" min="0" class="speed" aria-label="Wind Speed"
+									name="speed">
+							</label>
+							<select class="speed" name="speed-format" aria-label="Wind speed format">
+								<option value="kph">kph</option>
+								<option value="mph">mph</option>
+								<option value="kt">kt</option>
+							</select>
+						</div>
+
+						<div>
+							<label>
+								<span>Stage: </span>
+								<select class="stage" name="stage">
+									<option value="Extratropical cyclone">Extratropical cyclone</option>
+									<option value="Subtropical cyclone">Subtropical cyclone</option>
+									<option value="Tropical cyclone">Tropical cyclone</option>
+								</select>
+							</label>
+						</div>
+
+						<div>
+							<button type="button" class="remove"><ion-icon name="close-circle-outline"
+									aria-hidden="true"></ion-icon>
+								<span>Remove Point</span></button>
+						</div>
+					</div>
+				</div>
+
+				<button type="button" id="new-point"><ion-icon name="add-circle-outline" aria-hidden="true"></ion-icon>
+					<span>New
+						Point</span></button>
+
+				<div id="gens">
+					<button class="generate" type="submit">
+						<ion-icon name="analytics-outline" aria-hidden="true"></ion-icon>
+						<span>Generate Map</span>
+				</div>
+				<div id="gens-ie">
+					<button type="button" id="export-data">
+						<ion-icon name="download-outline" aria-hidden="true"></ion-icon>
+						<span>Export Data</span>
+					</button>
+					<button type="button" id="import-data">
+						<ion-icon name="download-outline" aria-hidden="true"></ion-icon>
+						<span>Import Data</span>
+					</button>
+				</div>
+
+			</form>
+			<div id="options-container">
+				<input type="checkbox" id="accessible" /><label for="accessible"
+					title="Uses the new, accessible Wikipedia color scheme.">Use accessible colours</label><br />
+				<input type="checkbox" id="smaller-dots" /><label for="smaller-dots"
+					title="Uses smaller dot sizes on the generated maps. Intended for summary maps only.">Use
+					smaller dot sizes (summary maps
+					only)</label><br />
+				<label for="map-selector"
+					title="Select map type (default is normal). Large and extra large maps are slower to generate.">
+					<ion-icon name="information-circle-outline" aria-hidden="true"
+						style="margin: .2rem 0; vertical-align: text-bottom"></ion-icon>
+					Select map type:</label>
+				<select id="map-selector">
+					<option value="normal" title="The original Blue Marble (2002) map.">Normal</option>
+					<option value="large" title="A larger version of the Blue Marble (2002) map.">Large</option>
+					<option value="xlarge"
+						title="A very large version of the Blue Marble (2002) map. Not recommended unless you're only a really fast connection.">
+						Extra large (slow)</option>
+					<option value="large-nxtgen"
+						title="Large version of the Blue Marble: Next Generation (July 2005) map.">Next Gen</option>
+					<option value="blkmar" title="A night light map, Black Marble (2016).">Black
+						Marble</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="page">
+			<div id="file-format-wrapper">
+				<label for="file-format">File format: </label>
+				<select id="file-format">
+					<option>HURDAT</option>
+					<option>ATCF</option>
+					<option>IBTrACS</option>
+					<option>RSMC</option>
+				</select>
+			</div>
+			<div id="page2-content">
+				<form id="paste-upload">
+					<textarea placeholder="Paste BT file here" name="bt-file" required></textarea>
+					<button type="submit" class="generate"><ion-icon name="analytics-outline"
+							aria-hidden="true"></ion-icon> <span>Generate
+							Map</span></button>
+				</form>
+
+				<form id="file-upload">
+					<div class="separator">OR</div>
+					<label for="file-input" class="generate"><ion-icon name="folder-outline"
+							aria-hidden="true"></ion-icon> <span>Upload
+							File</span></label>
+					<input type="file" id="file-input">
+				</form>
+			</div>
+		</div>
+
+	</main>
+
+	<div id="image-container" class="hidden">
+		<img id="loader" src="static/media/cyclone.png" alt="loading" loading="lazy" />
+		<img id="output" alt="generated track map" class="hidden" />
+		<button type="submit" id="close" title="Close">
+			<ion-icon name="close-outline" aria-hidden="true"></ion-icon>
+		</button>
+	</div>
+
+	<script src="static/js/sw.js"></script>
+	<script src="static/js/pages.js"></script>
+	<script src="static/js/generate.js"></script>
+	<script src="static/js/new_point.js"></script>
+
+	<script src="static/js/atcf.js"></script>
+	<script src="static/js/rsmc.js"></script>
+	<script src="static/js/hurdat.js"></script>
+	<script src="static/js/ibtracs.js"></script>
+	<script src="static/js/file_upload.js"></script>
+
+	<script src="static/js/manual_input.js"></script>
+	<script src="static/js/export.js"></script>
+
+	<script type="module" src="https://unpkg.com/ionicons@latest/dist/ionicons/ionicons.esm.js"></script>
+	<script nomodule="" src="https://unpkg.com/ionicons@latest/dist/ionicons/ionicons.js"></script>
+	<noscript>
+		<style>
+			#map-indicator {
+				display: none;
+			}
+		</style>
+		<div id="no-js">
+			<h1>TrackGen</h1>
+			<p>TrackGen requires JavaScript to run. Please enable JavaScript and refresh the page.</p>
+		</div>
+	</noscript>
+</body>
+
+</html>
