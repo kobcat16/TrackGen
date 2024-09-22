@@ -1,0 +1,559 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Varela+Round&display=swap');
+@import url('https://code.cdn.mozilla.net/fonts/fira.css');
+
+:root {
+	--background-1: #7EA16B;
+	--background-2: #FBAF00;
+	--background-3: #00511C;
+	--foreground-1: #FFD639;
+	--foreground-2: #007CBE;
+	--highlight: #FFA3AF;
+}
+
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+
+body,
+html {
+	font-family: 'Varela Round', sans-serif;
+	background-color: var(--background-1);
+	height: 100vh;
+	width: 100vw;
+	overflow: hidden;
+	background-image: url("../media/background.png");
+	background-size: 100vw 100vh;
+	background-repeat: no-repeat;
+}
+
+ion-icon {
+	transform: scale(1.25) translateY(-1%);
+	vertical-align: text-bottom;
+}
+
+h1 {
+	font-size: 5vh;
+	text-align: center;
+	color: var(--foreground-1);
+}
+
+#map-indicator {
+	position: fixed;
+	top: 20px;
+	left: 20px;
+	display: flex;
+	gap: 10px;
+}
+
+#map-indicator ion-icon {
+	color: #fff;
+	font-size: 20px;
+}
+
+#map-indicator .loader {
+	height: 20px;
+	width: 20px;
+	animation: spin 1s linear infinite;
+	transform-origin: center center;
+}
+
+#map-indicator .loader-path {
+	stroke-dasharray: 105, 100;
+	stroke-linecap: round;
+}
+
+main {
+	margin: 5vh 5vw;
+	white-space: nowrap;
+}
+
+#input-type {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	margin: 1vh 0;
+}
+
+#input-type button {
+	width: 100%;
+	font-size: 3vh;
+	padding: 0.5vh;
+	text-align: center;
+	color: var(--foreground-1);
+	background-color: transparent;
+	border: none;
+	border-right: 1px solid var(--foreground-2);
+	transition: 300ms all;
+}
+
+#input-type button~button {
+	border-left: 1px solid var(--foreground-2);
+	border-right: none;
+}
+
+#input-type button:hover {
+	cursor: pointer;
+	background-color: var(--foreground-2);
+}
+
+#input-type button.selected {
+	background-color: var(--foreground-2);
+}
+
+.page {
+	height: 77vh;
+	width: 90vw;
+	display: inline-block;
+	vertical-align: top;
+	transition: .5s margin-left;
+}
+
+.page~.page {
+	margin-left: 5vw;
+}
+
+#inputs {
+	max-height: 52.5vh;
+	overflow: auto;
+	scroll-behavior: smooth;
+}
+
+#inputs .point,
+#headers {
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+	gap: 5px;
+}
+
+#inputs .point {
+	margin-top: 5px;
+	background-color: rgba(200, 200, 200, 0.7);
+	border-radius: .5rem;
+	padding: 10px;
+	height: max-content;
+}
+
+
+#headers h3,
+#inputs div {
+	width: 100%;
+}
+
+#headers h3 {
+	text-align: center;
+	font-family: "Fira Sans", sans-serif;
+	font-size: 3vh;
+	color: #fff;
+}
+
+#inputs label span {
+	display: none;
+}
+
+#inputs input {
+	width: 40%;
+}
+
+input,
+textarea {
+	font-family: 'Roboto Mono', monospace;
+}
+
+#inputs .name {
+	width: 98%;
+}
+
+
+#inputs input,
+#inputs select {
+	height: 100%;
+	font-size: 1.5vw;
+	line-height: 1.5vw;
+	border: none;
+	border-radius: .25rem;
+	padding: 5px 10px;
+	vertical-align: middle;
+}
+
+
+input:focus,
+select:focus,
+button:focus,
+textarea:focus {
+	box-shadow: 0 0 1px 2px var(--highlight);
+	outline: none;
+}
+
+#inputs select {
+	width: 100%;
+	text-align-last: center;
+}
+
+#inputs .remove {
+	height: 100%;
+	width: 100%;
+	font-size: 1.5vw;
+	line-height: 1.5vw;
+	border: none;
+	border-radius: .25rem;
+	padding: 5px 10px;
+	vertical-align: middle;
+	color: #c00;
+	background-color: #fff;
+	transition: all 0.3s;
+}
+
+#inputs .remove:hover {
+	cursor: pointer;
+	color: #fff;
+	background-color: #c00;
+}
+
+select,
+button,
+#file-upload label {
+	font-family: 'Fira Sans', sans-serif;
+}
+
+#inputs label+select {
+	width: 56%;
+}
+
+
+#new-point {
+	margin-top: 1.5vh;
+	width: 100%;
+	font-size: 3vh;
+	padding: 1.75vh 0;
+	text-align: center;
+	border: none;
+	border-radius: .5rem;
+	color: var(--foreground-2);
+	background-color: #fff;
+	transition: all 0.3s;
+}
+
+#new-point:hover {
+	background-color: var(--foreground-2);
+	color: #fff;
+	cursor: pointer;
+}
+
+#new-point span,
+ion-icon+span {
+	vertical-align: baseline;
+}
+
+.generate {
+	display: block;
+	margin-top: 2vh;
+	width: 100%;
+	font-size: 4vh;
+	padding: 1.85vh 0;
+	text-align: center;
+	border: none;
+	border-radius: .5rem;
+	color: var(--background-3);
+	background-color: #fff;
+	transition: all 0.3s;
+}
+
+.generate:hover {
+	background-color: var(--foreground-1);
+	color: #000;
+	cursor: pointer;
+}
+
+.generate span {
+	vertical-align: middle;
+}
+
+
+#page2-content {
+	height: 90%;
+	width: 100%;
+	display: grid;
+	grid-template-rows: 4fr 1fr;
+	gap: 2vh;
+}
+
+#file-format-wrapper {
+	width: max-content;
+	margin: 0 auto 1vh auto;
+	font-size: 2.5vh;
+	color: var(--foreground-1);
+}
+
+
+#file-format {
+	outline: none;
+	border: none;
+	font-size: .8em;
+	border-radius: 0.5vh;
+	padding: .1rem .25rem;
+	vertical-align: middle;
+}
+
+#page2-content form {
+	height: 100%;
+	width: 100%;
+}
+
+
+#paste-upload {
+	display: grid;
+	grid-template-rows: 5fr 1fr;
+	gap: 1vh;
+}
+
+#paste-upload textarea,
+#paste-upload button,
+#file-upload {
+	height: 100%;
+	width: 100%;
+	display: block;
+	margin: 0;
+}
+
+#paste-upload textarea {
+	border-radius: .5rem;
+	resize: none;
+	padding: 1.5vh;
+	font-size: 16px;
+	border: none;
+}
+
+#file-upload label {
+	display: block;
+}
+
+#file-upload input {
+	display: none;
+}
+
+
+.separator {
+	display: flex;
+	align-items: center;
+	text-align: center;
+	font-size: 20px;
+	color: var(--foreground-1);
+}
+
+.separator::before,
+.separator::after {
+	content: '';
+	flex: 1;
+	border-bottom: 1px solid var(--foreground-1);
+}
+
+.separator:not(:empty)::before {
+	margin-right: .25em;
+}
+
+.separator:not(:empty)::after {
+	margin-left: .25em;
+}
+
+.hidden {
+	display: none;
+}
+
+#image-container {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.75);
+}
+
+#image-container #output {
+	display: flex;
+	align-content: center;
+	justify-content: center;
+	margin: 5vh 5vw;
+	width: 90vw;
+	height: 90vh;
+	object-fit: contain;
+}
+
+#image-container #output canvas {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+#image-container #loader {
+	margin: 45vh 45vw;
+	width: 10vw;
+	height: 10vh;
+	object-fit: contain;
+	animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+#image-container #close {
+	position: fixed;
+	top: 5vh;
+	right: 5vw;
+	width: 50px;
+	height: 50px;
+	font-size: 40px;
+	line-height: 40px;
+	background-color: var(--foreground-1);
+	color: #000;
+	border: none;
+	padding: 0;
+	border-radius: 50%;
+	cursor: pointer;
+}
+
+#image-container #close:hover {
+	background-color: red;
+	color: #fff;
+}
+
+@media screen and (max-width: 800px) {
+	#headers {
+		display: none;
+	}
+
+	#inputs {
+		margin-top: 10px;
+		max-height: 56vh;
+	}
+
+	#inputs .point {
+		display: block;
+		word-break: normal;
+	}
+
+	#inputs .point>div {
+		margin: 5px 0;
+	}
+
+	#inputs .point label>span {
+		display: inline-block;
+		width: 20%;
+		font-size: 12px;
+		white-space: break-spaces;
+		vertical-align: middle;
+	}
+
+	#inputs .point input,
+	#inputs .point select,
+	#inputs .point button {
+		font-size: 17px;
+	}
+
+	#inputs .point :not(:first-child) input {
+		width: 55%;
+	}
+
+	#inputs .point select {
+		width: 23%;
+	}
+
+	#inputs .point .stage,
+	#inputs .point .name {
+		width: 79%;
+	}
+
+	#inputs .remove {
+		line-height: inherit;
+	}
+
+	#new-point,
+	.generate {
+		font-size: 23px;
+		padding: 10px 0;
+		border-radius: .5rem;
+		margin-top: 10px;
+	}
+
+	#page2-content {
+		height: 96%;
+	}
+
+	#paste-upload {
+		grid-template-rows: 5fr 1fr;
+	}
+
+}
+
+#gens button, #gens-ie button {
+	font-size: 2.5vh;
+	padding: 1.75vh 0;
+}
+
+#gens-ie button:hover {
+	border-color: var(--foreground-2);
+	background-color: var(--foreground-2);
+	cursor: pointer;
+	color: #fff;	
+	transition: all 0.3s;
+}
+
+#options-container {
+	color: var(--foreground-1);
+	font-size: 20px;
+	margin: .5rem auto;
+	white-space: normal;
+}
+
+#options-container * {
+	vertical-align: middle;
+	margin: 1.25dvh 1.5dvh 1dvh auto;
+}
+
+#options-container label {
+	cursor: help;
+}
+
+#map-selector {
+	font-weight: 300;
+	font-style: italic;
+	padding: .2rem 0 .2rem .4rem;
+}
+
+#gens, #gens-ie {
+	display: grid;
+}
+
+#gens-ie {
+	grid-column-gap: .15rem;
+	grid-template-columns: 1fr 1fr;
+}
+
+@media (prefers-color-scheme: dark) {
+	body {
+		background-image: url("../media/background-dark.png");
+	}
+
+	input,
+	textarea {
+		background: rgb(175, 175, 175);
+		color: #000;
+	}
+
+	#inputs .point {
+		background-color: #555555b2;
+		color: #fff;
+	}
+
+	#new-point,
+	.generate {
+        background-color: #696969;
+        color: #fff;
+    }
+}
