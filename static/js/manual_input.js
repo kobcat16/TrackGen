@@ -2,13 +2,13 @@ function speedToCat(speed) {
 	const maxSpeed = Number.MAX_SAFE_INTEGER;
 	const speedCatMap = new Map([
 		[0, -999],
-		[34, -2],
-		[64, -1],
-		[83, 1],
-		[96, 2],
-		[113, 3],
-		[137, 4],
-		[157, 5],
+		[39, -2],
+		[74, -1],
+		[96, 1],
+		[111, 2],
+		[130, 3],
+		[157, 4],
+		[180, 5],
 		[maxSpeed, 5]
 	]);
 	for (let [speedThreshold, cat] of speedCatMap.entries()) {
@@ -43,10 +43,12 @@ document.querySelector("form").addEventListener("submit", (e) => {
 
 		let speed = Number(point.querySelector("input.speed").value);
 		const unit = point.querySelector("select.speed").getAttribute("data-selected");
-		if (unit === "mph") {
-			speed /= 1.151;
+		if (unit === "kts") {
+			speed *= 1.151;
 		} else if (unit === "kph") {
-			speed /= 1.852;
+			speed /= 1.609;
+		} else if (unit === "m/s") {
+			speed *= 2.237;
 		}
 
 		const stage = point.querySelector(".stage").getAttribute("data-selected");
