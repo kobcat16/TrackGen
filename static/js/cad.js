@@ -18,7 +18,7 @@ function parseCAD(data) {
     const parsed = [];
     let uniqueId = "";
     lines.forEach(line => {
-        const cols = line.split(" | ");
+        const cols = line.split("| ");
 
         if (cols.length === 3) {
             uniqueId = cols[0];
@@ -39,4 +39,4 @@ function parseCAD(data) {
 }
 
 // todo:
-// - somehow find a way to remove the first line lmao
+// - nothingrn
